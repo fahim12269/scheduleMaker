@@ -1,0 +1,29 @@
+import React from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import BarberCard from '../components/BarberCard';
+import { useAppStore } from '../store/appStore';
+
+export default function HomeScreen() {
+  const barbers = useAppStore(s => s.barbers);
+  const navigation = useNavigation<any>();
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Choose your barber</Text>
+      <FlatList
+        data={barbers}
+        renderItem={({ item }) => (
+          <BarberCard name={item.name} avatarUrl={item.avatarUrl} onPress={() => navigation.navigate('Barber', { barberId: item.id })} />
+        )}
+        keyExtractor={item => item.id}
+        contentContainerStyle={{ paddingTop: 8, paddingBottom: 24 }}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#F9FAFB' },
+  header: { fontSize: 24, fontWeight: '700', color: '#111827', padding: 16 },
+});
