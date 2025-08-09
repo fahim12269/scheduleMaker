@@ -1,6 +1,21 @@
-import { MMKV } from 'react-native-mmkv';
+import type { MMKV as MMKVType } from 'react-native-mmkv';
 
-export const storage = new MMKV({ id: 'barber_booking' });
+// Attempt to require MMKV at runtime to avoid crashes in Expo Go (where the native module is not present)
+let storage: { getString: (key: string) => string | undefined; set: (key: string, value: string) => void };
+
+try {
+  const { MMKV } = require('react-native-mmkv') as { MMKV: typeof MMKVType };
+  storage = new MMKV({ id: 'barber_booking' });
+} catch {
+  // Synchronous in-memory fallback so the app can run in Expo Go
+  const memory = new Map<string, string>();
+  storage = {
+    getString: (key: string) => memory.get(key),
+    set: (key: string, value: string) => {
+      memory.set(key, value);
+    },
+  };
+}
 
 export function getItem<T>(key: string): T | undefined {
   const value = storage.getString(key);
