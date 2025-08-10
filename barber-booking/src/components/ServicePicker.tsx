@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Service } from '../types';
 
 type Props = {
@@ -9,6 +9,25 @@ type Props = {
 };
 
 export default function ServicePicker({ services, selectedServiceId, onSelect }: Props) {
+  const { width } = useWindowDimensions();
+  const isCompact = width < 360;
+  if (isCompact) {
+    return (
+      <View style={styles.wrapContainer}>
+        {services.map(s => {
+          const selected = s.id === selectedServiceId;
+          return (
+            <TouchableOpacity key={s.id} onPress={() => onSelect(s.id)} style={[styles.pill, selected && styles.pillSelected]}>
+              <Text style={[styles.pillText, selected && styles.pillTextSelected]}>{s.name}</Text>
+              <Text style={[styles.pillSubText, selected && styles.pillTextSelected]}>
+                {Math.round(s.durationMinutes)}m · ${(s.priceCents / 100).toFixed(0)}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    );
+  }
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.container}>
       {services.map(s => {
@@ -28,6 +47,7 @@ export default function ServicePicker({ services, selectedServiceId, onSelect }:
 
 const styles = StyleSheet.create({
   container: { paddingHorizontal: 16, gap: 8 },
+  wrapContainer: { paddingHorizontal: 16, flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   pill: {
     paddingVertical: 10,
     paddingHorizontal: 14,

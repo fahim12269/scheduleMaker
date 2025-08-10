@@ -2,11 +2,13 @@ import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useAppStore } from '../store/appStore';
 import { format, isAfter } from 'date-fns';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function AppointmentsScreen() {
   const appointments = useAppStore(s => s.appointments);
   const barbers = useAppStore(s => s.barbers);
   const cancelAppointment = useAppStore(s => s.cancelAppointment);
+  const insets = useSafeAreaInsets();
 
   const upcoming = useMemo(() =>
     appointments
@@ -16,7 +18,7 @@ export default function AppointmentsScreen() {
   , [appointments]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Your appointments</Text>
       <FlatList
         data={upcoming}
@@ -34,9 +36,9 @@ export default function AppointmentsScreen() {
           );
         }}
         ListEmptyComponent={<Text style={{ padding: 16, color: '#6B7280' }}>No upcoming appointments</Text>}
-        contentContainerStyle={{ paddingBottom: 24 }}
+        contentContainerStyle={{ paddingBottom: 24 + insets.bottom }}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -8,6 +8,7 @@ import BarberScreen from '../screens/BarberScreen';
 import ConfirmScreen from '../screens/ConfirmScreen';
 import AppointmentsScreen from '../screens/AppointmentsScreen';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export type RootStackParamList = {
   Tabs: undefined;
@@ -19,13 +20,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
 function Tabs() {
+  const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarActiveTintColor: '#111827',
         tabBarInactiveTintColor: '#9CA3AF',
-        tabBarStyle: { height: 64, paddingBottom: 10, paddingTop: 8 },
+        tabBarStyle: { height: 56 + insets.bottom, paddingBottom: Math.max(8, insets.bottom), paddingTop: 8 },
         tabBarIcon: ({ color, size, focused }) => {
           const name = route.name === 'Home' ? (focused ? 'home' : 'home-outline') : (focused ? 'calendar' : 'calendar-outline');
           return <Ionicons name={name as any} size={size} color={color} />;
