@@ -7,6 +7,11 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 enableScreens(true);
 
+/**
+ * Root application component.
+ * - Sets up gesture handling and safe-area context.
+ * - Renders the global `RootNavigator` which controls routing.
+ */
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

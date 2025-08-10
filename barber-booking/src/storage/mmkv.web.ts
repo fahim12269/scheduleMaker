@@ -1,3 +1,7 @@
+/**
+ * Web storage shim that mirrors the minimal MMKV API used by the app.
+ * Uses `localStorage` under the hood.
+ */
 export const storage = {
   getString(key: string): string | undefined {
     try {

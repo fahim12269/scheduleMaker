@@ -9,6 +9,10 @@ import { getAvailableSlotsForDate } from '../lib/availability';
 import { format } from 'date-fns';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+/**
+ * Barber details and booking page.
+ * Lets users pick a service, choose a date, and select an available time slot.
+ */
 export default function BarberScreen() {
   const route = useRoute<any>();
   const navigation = useNavigation<any>();

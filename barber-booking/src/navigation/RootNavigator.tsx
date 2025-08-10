@@ -10,6 +10,9 @@ import AppointmentsScreen from '../screens/AppointmentsScreen';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+/**
+ * Strongly-typed route params for the root stack navigator.
+ */
 export type RootStackParamList = {
   Tabs: undefined;
   Barber: { barberId: string };
@@ -19,6 +22,10 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
+/**
+ * Bottom tabs navigator containing Home and Appointments.
+ * Hides headers and configures icons and safe-area-aware tab bar.
+ */
 function Tabs() {
   const insets = useSafeAreaInsets();
   return (
@@ -40,10 +47,16 @@ function Tabs() {
   );
 }
 
+/**
+ * Returns a navigation theme matching the current color scheme.
+ */
 function getTheme(colorScheme: ColorSchemeName) {
   return colorScheme === 'dark' ? DarkTheme : DefaultTheme;
 }
 
+/**
+ * Hosts the root stack navigator and applies theming.
+ */
 export default function RootNavigator() {
   const colorScheme = useColorScheme();
   return (

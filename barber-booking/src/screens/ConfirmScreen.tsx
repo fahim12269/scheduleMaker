@@ -5,6 +5,9 @@ import { useAppStore } from '../store/appStore';
 import { format } from 'date-fns';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+/**
+ * Confirmation screen that summarizes the booking before committing.
+ */
 export default function ConfirmScreen() {
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
@@ -22,6 +25,9 @@ export default function ConfirmScreen() {
 
   const insets = useSafeAreaInsets();
 
+  /**
+   * Creates the appointment in the store and navigates to the Appointments tab.
+   */
   const onConfirm = () => {
     bookAppointment({
       barberId: barber.id,

@@ -1,8 +1,15 @@
 import { addMinutes, areIntervalsOverlapping, format, isBefore, isSameDay, parse, set } from 'date-fns';
 import { Appointment, Barber, Service } from '../types';
 
+/**
+ * Represents a continuous time interval.
+ */
 export type TimeSlot = { start: Date; end: Date };
 
+/**
+ * Builds the daily working interval for a barber on a given date.
+ * Returns `null` if the barber does not work that day or if hours are invalid.
+ */
 function buildWorkIntervalForDate(barber: Barber, date: Date): TimeSlot | null {
   const weekday = date.getDay();
   const hours = barber.weeklySchedule[weekday];
@@ -15,6 +22,10 @@ function buildWorkIntervalForDate(barber: Barber, date: Date): TimeSlot | null {
   return { start, end };
 }
 
+/**
+ * Generates candidate time slots within a working interval.
+ * Step defaults to 15 minutes but can be adjusted.
+ */
 function generateCandidateSlots(work: TimeSlot, service: Service, stepMinutes: number = 15): TimeSlot[] {
   const slots: TimeSlot[] = [];
   let cursor = new Date(work.start);
@@ -26,6 +37,9 @@ function generateCandidateSlots(work: TimeSlot, service: Service, stepMinutes: n
   return slots;
 }
 
+/**
+ * Computes available slots for a barber, service and date, excluding overlaps with existing appointments.
+ */
 export function getAvailableSlotsForDate(
   barber: Barber,
   service: Service,
@@ -51,6 +65,9 @@ export function getAvailableSlotsForDate(
   });
 }
 
+/**
+ * Formats a time slot for display, e.g. "09:00 - 09:30".
+ */
 export function formatSlot(slot: TimeSlot) {
   return `${format(slot.start, 'HH:mm')} - ${format(slot.end, 'HH:mm')}`;
 }

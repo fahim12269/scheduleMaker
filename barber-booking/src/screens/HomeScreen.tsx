@@ -5,6 +5,10 @@ import BarberCard from '../components/BarberCard';
 import { useAppStore } from '../store/appStore';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+/**
+ * Landing page listing available barbers.
+ * Tapping a card navigates to the selected barber's availability page.
+ */
 export default function HomeScreen() {
   const barbers = useAppStore(s => s.barbers);
   const navigation = useNavigation<any>();
