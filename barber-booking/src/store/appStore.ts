@@ -3,15 +3,28 @@ import { nanoid } from 'nanoid/non-secure';
 import { Appointment, Barber, Service } from '../types';
 import { getItem, setItem } from '../storage/mmkv';
 
+/**
+ * Global application state managed via Zustand.
+ */
 export type AppState = {
+  /** In-memory list of available barbers (seeded on first run). */
   barbers: Barber[];
+  /** All booked appointments (persisted). */
   appointments: Appointment[];
+  /**
+   * Books a new appointment and persists it.
+   * @returns The created `Appointment`.
+   */
   bookAppointment: (params: { barberId: string; serviceId: string; startISO: string; customerName: string; durationMinutes: number }) => Appointment;
+  /** Cancels a previously created appointment by id and persists the change. */
   cancelAppointment: (id: string) => void;
 };
 
 const PERSIST_KEY = 'app_state_v1';
 
+/**
+ * Seeds a demo set of barbers, services and working hours.
+ */
 function seedBarbers(): Barber[] {
   return [
     {
@@ -55,12 +68,18 @@ function seedBarbers(): Barber[] {
   ];
 }
 
+/**
+ * Loads initial state from storage or seeds defaults on first run.
+ */
 function loadInitialState(): Pick<AppState, 'barbers' | 'appointments'> {
   const persisted = getItem<Pick<AppState, 'barbers' | 'appointments'>>(PERSIST_KEY);
   if (persisted) return persisted;
   return { barbers: seedBarbers(), appointments: [] };
 }
 
+/**
+ * App-wide store instance with actions that automatically persist to storage.
+ */
 export const useAppStore = create<AppState>((set, get) => ({
   ...loadInitialState(),
   bookAppointment: ({ barberId, serviceId, startISO, customerName, durationMinutes }) => {

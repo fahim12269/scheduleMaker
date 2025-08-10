@@ -1,12 +1,21 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 
+/**
+ * Props for `BarberCard`.
+ * - `name`: Barber display name.
+ * - `avatarUrl`: URL to the barber's avatar image.
+ * - `onPress`: Tap handler to navigate to the barber details.
+ */
 export type BarberCardProps = {
   name: string;
   avatarUrl: string;
   onPress: () => void;
 };
 
+/**
+ * Compact card displaying a barber with avatar and a call to action.
+ */
 export default function BarberCard({ name, avatarUrl, onPress }: BarberCardProps) {
   const { width } = useWindowDimensions();
   const avatarSize = Math.max(56, Math.min(72, Math.round(width * 0.18)));

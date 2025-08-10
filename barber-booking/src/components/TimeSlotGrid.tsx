@@ -3,11 +3,19 @@ import { StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'r
 import { format } from 'date-fns';
 import { TimeSlot } from '../lib/availability';
 
+/**
+ * Props for `TimeSlotGrid`.
+ * - `slots`: Available time slots for the selected date.
+ * - `onSelect`: Invoked when a slot is picked.
+ */
 type Props = {
   slots: TimeSlot[];
   onSelect: (slot: TimeSlot) => void;
 };
 
+/**
+ * Responsive grid of selectable time slots.
+ */
 export default function TimeSlotGrid({ slots, onSelect }: Props) {
   const { width } = useWindowDimensions();
   const horizontalPadding = 16;

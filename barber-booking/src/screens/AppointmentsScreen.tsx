@@ -4,6 +4,10 @@ import { useAppStore } from '../store/appStore';
 import { format, isAfter } from 'date-fns';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+/**
+ * Lists upcoming appointments with the ability to cancel.
+ * Reads data from the global Zustand store.
+ */
 export default function AppointmentsScreen() {
   const appointments = useAppStore(s => s.appointments);
   const barbers = useAppStore(s => s.barbers);

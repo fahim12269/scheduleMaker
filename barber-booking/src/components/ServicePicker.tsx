@@ -2,12 +2,22 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Service } from '../types';
 
+/**
+ * Props for `ServicePicker`.
+ * - `services`: Available services to display.
+ * - `selectedServiceId`: Currently selected service identifier.
+ * - `onSelect`: Callback invoked when a service is selected.
+ */
 type Props = {
   services: Service[];
   selectedServiceId: string;
   onSelect: (serviceId: string) => void;
 };
 
+/**
+ * Horizontal (or wrapped) pill selector for barber services.
+ * Adjusts layout for compact screens.
+ */
 export default function ServicePicker({ services, selectedServiceId, onSelect }: Props) {
   const { width } = useWindowDimensions();
   const isCompact = width < 360;
