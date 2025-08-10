@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 
 export type BarberCardProps = {
   name: string;
@@ -8,9 +8,11 @@ export type BarberCardProps = {
 };
 
 export default function BarberCard({ name, avatarUrl, onPress }: BarberCardProps) {
+  const { width } = useWindowDimensions();
+  const avatarSize = Math.max(56, Math.min(72, Math.round(width * 0.18)));
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Image source={{ uri: avatarUrl }} style={styles.avatar} />
+      <Image source={{ uri: avatarUrl }} style={[styles.avatar, { width: avatarSize, height: avatarSize }]} />
       <View style={styles.info}>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.meta}>Tap to view availability</Text>
@@ -34,8 +36,6 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   avatar: {
-    width: 64,
-    height: 64,
     borderRadius: 12,
   },
   info: { marginLeft: 12, flex: 1 },

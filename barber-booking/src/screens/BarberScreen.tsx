@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TextInput, View, useWindowDimensions } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useAppStore } from '../store/appStore';
 import ServicePicker from '../components/ServicePicker';
@@ -7,6 +7,7 @@ import DayCalendar from '../components/DayCalendar';
 import TimeSlotGrid from '../components/TimeSlotGrid';
 import { getAvailableSlotsForDate } from '../lib/availability';
 import { format } from 'date-fns';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function BarberScreen() {
   const route = useRoute<any>();
@@ -23,10 +24,14 @@ export default function BarberScreen() {
   const service = useMemo(() => barber.services.find(s => s.id === selectedServiceId)!, [barber, selectedServiceId]);
   const slots = useMemo(() => getAvailableSlotsForDate(barber, service, selectedDate, appointments), [barber, service, selectedDate, appointments]);
 
+  const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const bannerHeight = Math.min(300, Math.max(180, width * 0.55));
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
-        <Image source={{ uri: barber.avatarUrl }} style={styles.banner} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }} edges={['top']}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 24 + insets.bottom }}>
+        <Image source={{ uri: barber.avatarUrl }} style={[styles.banner, { height: bannerHeight }]} />
         <Text style={styles.title}>{barber.name}</Text>
 
         <Text style={styles.section}>Services</Text>

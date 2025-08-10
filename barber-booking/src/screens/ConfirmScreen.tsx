@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useAppStore } from '../store/appStore';
 import { format } from 'date-fns';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ConfirmScreen() {
   const route = useRoute<any>();
@@ -19,6 +20,8 @@ export default function ConfirmScreen() {
   const start = new Date(timeISO);
   const [customerName] = useState('Guest');
 
+  const insets = useSafeAreaInsets();
+
   const onConfirm = () => {
     bookAppointment({
       barberId: barber.id,
@@ -32,7 +35,7 @@ export default function ConfirmScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: 16 + insets.bottom }]}>
       <Text style={styles.title}>Confirm booking</Text>
       <View style={styles.card}>
         <Text style={styles.row}><Text style={styles.label}>Barber:</Text> {barber.name}</Text>

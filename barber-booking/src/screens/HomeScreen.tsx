@@ -3,13 +3,15 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BarberCard from '../components/BarberCard';
 import { useAppStore } from '../store/appStore';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const barbers = useAppStore(s => s.barbers);
   const navigation = useNavigation<any>();
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Choose your barber</Text>
       <FlatList
         data={barbers}
@@ -17,9 +19,9 @@ export default function HomeScreen() {
           <BarberCard name={item.name} avatarUrl={item.avatarUrl} onPress={() => navigation.navigate('Barber', { barberId: item.id })} />
         )}
         keyExtractor={item => item.id}
-        contentContainerStyle={{ paddingTop: 8, paddingBottom: 24 }}
+        contentContainerStyle={{ paddingTop: 8, paddingBottom: 24 + insets.bottom }}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

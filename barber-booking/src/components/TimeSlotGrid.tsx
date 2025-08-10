@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { format } from 'date-fns';
 import { TimeSlot } from '../lib/availability';
 
@@ -9,6 +9,12 @@ type Props = {
 };
 
 export default function TimeSlotGrid({ slots, onSelect }: Props) {
+  const { width } = useWindowDimensions();
+  const horizontalPadding = 16;
+  const gap = 8;
+  const availableRowWidth = width - horizontalPadding * 2;
+  const cellMinWidth = Math.min(140, Math.max(96, (availableRowWidth - gap * 2) / 3));
+
   if (slots.length === 0) {
     return (
       <View style={styles.emptyWrap}>
@@ -17,9 +23,9 @@ export default function TimeSlotGrid({ slots, onSelect }: Props) {
     );
   }
   return (
-    <View style={styles.grid}>
+    <View style={[styles.grid, { rowGap: gap }]}> 
       {slots.map((slot, idx) => (
-        <TouchableOpacity key={idx} onPress={() => onSelect(slot)} style={styles.cell}>
+        <TouchableOpacity key={idx} onPress={() => onSelect(slot)} style={[styles.cell, { minWidth: cellMinWidth }]}> 
           <Text style={styles.cellText}>{format(slot.start, 'HH:mm')}</Text>
         </TouchableOpacity>
       ))}
@@ -43,6 +49,7 @@ const styles = StyleSheet.create({
   cellText: {
     fontWeight: '600',
     color: '#111827',
+    textAlign: 'center',
   },
   emptyWrap: { padding: 16, alignItems: 'center' },
   empty: { color: '#6B7280' },
