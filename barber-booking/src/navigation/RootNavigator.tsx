@@ -9,6 +9,8 @@ import ConfirmScreen from '../screens/ConfirmScreen';
 import AppointmentsScreen from '../screens/AppointmentsScreen';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import LoginScreen from '../screens/LoginScreen';
+import { useAuthStore } from '../store/authStore';
 
 /**
  * Strongly-typed route params for the root stack navigator.
@@ -17,6 +19,7 @@ export type RootStackParamList = {
   Tabs: undefined;
   Barber: { barberId: string };
   Confirm: { barberId: string; serviceId: string; dateISO: string; timeISO: string };
+  Login: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -59,12 +62,21 @@ function getTheme(colorScheme: ColorSchemeName) {
  */
 export default function RootNavigator() {
   const colorScheme = useColorScheme();
+  const customerNumber = useAuthStore(s => s.customerNumber);
+  const isLoggedIn = !!customerNumber;
+
   return (
     <NavigationContainer theme={getTheme(colorScheme)}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Tabs" component={Tabs} />
-        <Stack.Screen name="Barber" component={BarberScreen} />
-        <Stack.Screen name="Confirm" component={ConfirmScreen} />
+        {!isLoggedIn ? (
+          <Stack.Screen name="Login" component={LoginScreen} />
+        ) : (
+          <>
+            <Stack.Screen name="Tabs" component={Tabs} />
+            <Stack.Screen name="Barber" component={BarberScreen} />
+            <Stack.Screen name="Confirm" component={ConfirmScreen} />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
