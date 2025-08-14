@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native
 import { useAppStore } from '../store/appStore';
 import { format, isAfter } from 'date-fns';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuthStore } from '../store/authStore';
 
 /**
  * Lists upcoming appointments with the ability to cancel.
@@ -12,6 +13,7 @@ export default function AppointmentsScreen() {
   const appointments = useAppStore(s => s.appointments);
   const barbers = useAppStore(s => s.barbers);
   const cancelAppointment = useAppStore(s => s.cancelAppointment);
+  const logout = useAuthStore(s => s.logout);
   const insets = useSafeAreaInsets();
 
   const upcoming = useMemo(() =>
@@ -23,7 +25,12 @@ export default function AppointmentsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Your appointments</Text>
+      <View style={styles.headerRow}>
+        <Text style={styles.header}>Your appointments</Text>
+        <TouchableOpacity onPress={logout} style={styles.logoutBtn}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={upcoming}
         keyExtractor={a => a.id}
@@ -48,7 +55,10 @@ export default function AppointmentsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F9FAFB' },
-  header: { fontSize: 24, fontWeight: '700', color: '#111827', padding: 16 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingTop: 16 },
+  header: { fontSize: 24, fontWeight: '700', color: '#111827' },
+  logoutBtn: { backgroundColor: '#F3F4F6', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10 },
+  logoutText: { color: '#111827', fontWeight: '600' },
   card: {
     backgroundColor: '#fff',
     marginHorizontal: 16,
